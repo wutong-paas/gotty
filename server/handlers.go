@@ -12,8 +12,7 @@ import (
 
 	"github.com/gorilla/websocket"
 	"github.com/pkg/errors"
-
-	"github.com/yudai/gotty/webtty"
+	"github.com/wutong-paas/gotty/webtty"
 )
 
 func (server *Server) generateHandleWS(ctx context.Context, cancel context.CancelFunc, counter *counter) http.HandlerFunc {
@@ -61,7 +60,7 @@ func (server *Server) generateHandleWS(ctx context.Context, cancel context.Cance
 		log.Printf("New client connected: %s, connections: %d/%d", r.RemoteAddr, num, server.options.MaxConnection)
 
 		if r.Method != "GET" {
-			http.Error(w, "Method not allowed", 405)
+			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
 
@@ -126,7 +125,7 @@ func (server *Server) processWSConn(ctx context.Context, conn *websocket.Conn) e
 		[]string{"server", "master", "slave"},
 		map[string]map[string]interface{}{
 			"server": server.options.TitleVariables,
-			"master": map[string]interface{}{
+			"master": {
 				"remote_addr": conn.RemoteAddr(),
 			},
 			"slave": slave.WindowTitleVariables(),
@@ -173,7 +172,7 @@ func (server *Server) handleIndex(w http.ResponseWriter, r *http.Request) {
 		[]string{"server", "master"},
 		map[string]map[string]interface{}{
 			"server": server.options.TitleVariables,
-			"master": map[string]interface{}{
+			"master": {
 				"remote_addr": r.RemoteAddr,
 			},
 		},

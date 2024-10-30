@@ -1,17 +1,15 @@
 package utils
 
 import (
-	"io/ioutil"
 	"log"
 	"os"
 	"reflect"
 	"strings"
 
-	"github.com/codegangsta/cli"
 	"github.com/fatih/structs"
+	"github.com/urfave/cli"
+	"github.com/wutong-paas/gotty/pkg/homedir"
 	"github.com/yudai/hcl"
-
-	"github.com/yudai/gotty/pkg/homedir"
 )
 
 func GenerateFlags(options ...interface{}) (flags []cli.Flag, mappings map[string]string, err error) {
@@ -109,7 +107,7 @@ func ApplyConfigFile(filePath string, options ...interface{}) error {
 
 	fileString := []byte{}
 	log.Printf("Loading config file at: %s", filePath)
-	fileString, err := ioutil.ReadFile(filePath)
+	fileString, err := os.ReadFile(filePath)
 	if err != nil {
 		return err
 	}

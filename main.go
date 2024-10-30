@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -9,12 +10,11 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/codegangsta/cli"
-
-	"github.com/yudai/gotty/backend/localcommand"
-	"github.com/yudai/gotty/pkg/homedir"
-	"github.com/yudai/gotty/server"
-	"github.com/yudai/gotty/utils"
+	"github.com/urfave/cli"
+	"github.com/wutong-paas/gotty/backend/localcommand"
+	"github.com/wutong-paas/gotty/pkg/homedir"
+	"github.com/wutong-paas/gotty/server"
+	"github.com/wutong-paas/gotty/utils"
 )
 
 func main() {
@@ -39,7 +39,9 @@ func main() {
 		exit(err, 3)
 	}
 
-	app.Flags = append(
+	cliFlags = append(cliFlags, cli.StringFlag{})
+
+	cliFlags = append(
 		cliFlags,
 		cli.StringFlag{
 			Name:   "config",
@@ -51,9 +53,9 @@ func main() {
 
 	app.Action = func(c *cli.Context) {
 		if len(c.Args()) == 0 {
-			msg := "Error: No command given."
+			msg := "error: No command given"
 			cli.ShowAppHelp(c)
-			exit(fmt.Errorf(msg), 1)
+			exit(errors.New(msg), 1)
 		}
 
 		configFile := c.String("config")

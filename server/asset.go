@@ -16,7 +16,6 @@ import (
 	"compress/gzip"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -89,7 +88,7 @@ func staticCssIndexCss() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "static/css/index.css", size: 116, mode: os.FileMode(436), modTime: time.Unix(1503381631, 0)}
+	info := bindataFileInfo{name: "static/css/index.css", size: 116, mode: os.FileMode(0644), modTime: time.Unix(1503381631, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -109,7 +108,7 @@ func staticCssXtermCss() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "static/css/xterm.css", size: 35782, mode: os.FileMode(436), modTime: time.Unix(1503381631, 0)}
+	info := bindataFileInfo{name: "static/css/xterm.css", size: 35782, mode: os.FileMode(0644), modTime: time.Unix(1503381631, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -129,7 +128,7 @@ func staticCssXterm_customizeCss() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "static/css/xterm_customize.css", size: 550, mode: os.FileMode(436), modTime: time.Unix(1503469811, 0)}
+	info := bindataFileInfo{name: "static/css/xterm_customize.css", size: 550, mode: os.FileMode(0644), modTime: time.Unix(1503469811, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -149,7 +148,7 @@ func staticFaviconPng() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "static/favicon.png", size: 863, mode: os.FileMode(436), modTime: time.Unix(1503381631, 0)}
+	info := bindataFileInfo{name: "static/favicon.png", size: 863, mode: os.FileMode(0644), modTime: time.Unix(1503381631, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -169,7 +168,7 @@ func staticIndexHtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "static/index.html", size: 491, mode: os.FileMode(436), modTime: time.Unix(1503385310, 0)}
+	info := bindataFileInfo{name: "static/index.html", size: 491, mode: os.FileMode(0644), modTime: time.Unix(1503385310, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -189,7 +188,7 @@ func staticJsBundleJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "static/js/bundle.js", size: 773293, mode: os.FileMode(436), modTime: time.Unix(1503385152, 0)}
+	info := bindataFileInfo{name: "static/js/bundle.js", size: 773293, mode: os.FileMode(0644), modTime: time.Unix(1503385152, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -209,7 +208,7 @@ func staticJsGottyBundleJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "static/js/gotty-bundle.js", size: 332382, mode: os.FileMode(436), modTime: time.Unix(1503734056, 0)}
+	info := bindataFileInfo{name: "static/js/gotty-bundle.js", size: 332382, mode: os.FileMode(0644), modTime: time.Unix(1503734056, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -316,17 +315,17 @@ type bintree struct {
 }
 
 var _bintree = &bintree{nil, map[string]*bintree{
-	"static": &bintree{nil, map[string]*bintree{
-		"css": &bintree{nil, map[string]*bintree{
-			"index.css":           &bintree{staticCssIndexCss, map[string]*bintree{}},
-			"xterm.css":           &bintree{staticCssXtermCss, map[string]*bintree{}},
-			"xterm_customize.css": &bintree{staticCssXterm_customizeCss, map[string]*bintree{}},
+	"static": {nil, map[string]*bintree{
+		"css": {nil, map[string]*bintree{
+			"index.css":           {staticCssIndexCss, map[string]*bintree{}},
+			"xterm.css":           {staticCssXtermCss, map[string]*bintree{}},
+			"xterm_customize.css": {staticCssXterm_customizeCss, map[string]*bintree{}},
 		}},
-		"favicon.png": &bintree{staticFaviconPng, map[string]*bintree{}},
-		"index.html":  &bintree{staticIndexHtml, map[string]*bintree{}},
-		"js": &bintree{nil, map[string]*bintree{
-			"bundle.js":       &bintree{staticJsBundleJs, map[string]*bintree{}},
-			"gotty-bundle.js": &bintree{staticJsGottyBundleJs, map[string]*bintree{}},
+		"favicon.png": {staticFaviconPng, map[string]*bintree{}},
+		"index.html":  {staticIndexHtml, map[string]*bintree{}},
+		"js": {nil, map[string]*bintree{
+			"bundle.js":       {staticJsBundleJs, map[string]*bintree{}},
+			"gotty-bundle.js": {staticJsGottyBundleJs, map[string]*bintree{}},
 		}},
 	}},
 }}
@@ -345,7 +344,7 @@ func RestoreAsset(dir, name string) error {
 	if err != nil {
 		return err
 	}
-	err = ioutil.WriteFile(_filePath(dir, name), data, info.Mode())
+	err = os.WriteFile(_filePath(dir, name), data, info.Mode())
 	if err != nil {
 		return err
 	}

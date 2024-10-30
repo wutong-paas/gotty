@@ -22,7 +22,7 @@ func TestWriteFromPTY(t *testing.T) {
 		connOutPipeReader,
 		connInPipeWriter,
 	}
-	dt, err := New(conn)
+	dt, err := New(conn, nil)
 	if err != nil {
 		t.Fatalf("Unexpected error from New(): %s", err)
 	}
@@ -39,7 +39,7 @@ func TestWriteFromPTY(t *testing.T) {
 	}()
 
 	message := []byte("foobar")
-	n, err := dt.TTY().Write(message)
+	n, err := dt.masterConn.Write(message)
 	if err != nil {
 		t.Fatalf("Unexpected error from Write(): %s", err)
 	}
@@ -77,7 +77,7 @@ func TestWriteFromConn(t *testing.T) {
 		connInPipeWriter,
 	}
 
-	dt, err := New(conn)
+	dt, err := New(conn, nil)
 	if err != nil {
 		t.Fatalf("Unexpected error from New(): %s", err)
 	}
@@ -109,7 +109,7 @@ func TestWriteFromConn(t *testing.T) {
 		t.Fatalf("Write() accepted `%d` for message `%s`", n, message)
 	}
 
-	n, err = dt.TTY().Read(readBuf)
+	n, err = dt.masterConn.Read(readBuf)
 	if err != nil {
 		t.Fatalf("Unexpected error from Write(): %s", err)
 	}
@@ -119,7 +119,7 @@ func TestWriteFromConn(t *testing.T) {
 
 	// ping
 	message = []byte("1\n") // line buffered canonical mode
-	n, err = connOutPipeWriter.Write(message)
+	n, _ = connOutPipeWriter.Write(message)
 	if n != len(message) {
 		t.Fatalf("Write() accepted `%d` for message `%s`", n, message)
 	}
